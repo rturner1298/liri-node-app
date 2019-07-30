@@ -1,14 +1,16 @@
+//Use local environment file
 var env = require("dotenv").config();
+
 var keys = require("./keys.js");
-//var spotify1 = new spotify(keys.spotify);
-var spotify = require('node-spotify-api');
+
+//var spotify = require('node-spotify-api');
 
 
 // // Define dependent variables so they're global
 // require("dotenv").config();
 // // NPM Packages & API keys
 // var keys = require("./keys.js");
-// var Spotify = require('node-spotify-api');
+ var Spotify = require('node-spotify-api');
 var axios = require("axios");
 var moment = require("moment");
 // for read & write
@@ -22,7 +24,9 @@ var option = process.argv[2];
 
 
 // Initialize Spotify client
- //var spotify = new Spotify(keys.spotify);
+//console.log("THIS IS THE KEY " + keys.spotify.id + "THIS IS THE SECRET " + keys.spotify.secret);
+ var spotify = new Spotify({id: keys.spotify.id,
+    secret: keys.spotify.secret});
 switch (option) {
     case "movie-this":
         movieThis(query);
@@ -52,6 +56,7 @@ switch (option) {
 // SPOTIFY-THIS-SONG
 function spotifyCall(songName) {
     spotify.search({ type: 'track', query: songName }, function (err, data) {
+        console.log("searching for song " + songName);
         if (err) {
             return console.log('Error occurred: ' + err);
         }
@@ -91,6 +96,9 @@ function concertThis(artist) {
     axios.get(bandsQueryUrl).then(
         function (response) {
             console.log("_Upcoming Events_");
+            // console.log("*********************RESPONSE FOR WEB API CALL*********************************************");
+            // console.log(response);
+            // console.log("*********************RESPONSE FOR END OF WEB API CALL**************************************");
             console.log("Artist: " + artist + "\nVenue: " + response.data[0].venue.name + "\nLocation: " + response.data[0].venue.country + "\nDate: " + response.data[0].datatime + "\nRock on dude!");
         });
 }
